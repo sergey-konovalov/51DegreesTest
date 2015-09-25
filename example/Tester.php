@@ -21,36 +21,48 @@
  * defined by the Mozilla Public License, v. 2.0.
  * ********************************************************************* */
 
-require_once 'ExampleMaster.php';
-require_once '../core/51Degrees.php';
+use FiftyoneDegrees;
+
 ?>
 
 <html>
-<head>
-<title>51Degrees Image Optimser Gallery</title>
-<?php fiftyone_degrees_echo_header(); ?>
-</head>
-<body>
-<?php
-fiftyone_degrees_echo_menu();
-if (array_key_exists('ua', $_GET)) {
-  $ua = $_GET['ua'];
-}
-else {
-  $ua = $_SERVER['HTTP_USER_AGENT'];
-}
-?>
-<div id="Content">
-<form action="Tester.php" method="get">
-  Useragent: <input type="text" name="ua" value="<?php echo $ua; ?>" />
-  <input type="submit" value="Submit">
-</form>
-<?php
 
-$properties = fiftyone_degrees_get_device_data($ua);
-fiftyone_degrees_echo_properties($properties);
+  <head>
+    <title>51Degrees Device Detection</title>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link id="LinkStyleDefault" runat="server" rel="Stylesheet" type="text/css" href="Default.css" />
+  </head>
 
-?>
-</div>
-</body>
+  <body>
+
+    <?php
+      $ua = array_key_exists('ua', $_GET)? $_GET['ua'] : $_SERVER['HTTP_USER_AGENT'];
+    ?>
+
+    <div id="Content">
+      <form action="Tester.php" method="get">
+        Useragent: <input type="text" name="ua" value="<?php echo $ua; ?>" />
+        <input type="submit" value="Submit">
+      </form>
+
+      <?php
+        $properties = fiftyone_degrees_get_device_data($ua);
+        foreach ($properties as $property => $value) {
+          if ($property == 'debug_info' || $property == 'debug_timings') {
+            foreach ($value as $info => $result) {
+              echo "<p>$property - $info: $result</p>";
+            }
+          }
+          else {
+            if (is_array($value))
+              $value = implode('|', $value);
+            if (is_bool($value))
+              $value = $value === TRUE ? 'True' : 'False';
+            echo "<p>$property: $value</p>";
+          }
+        }
+      ?>
+
+    </div>
+  </body>
 </html>

@@ -20,23 +20,34 @@
  * defined by the Mozilla Public License, v. 2.0.
  * ********************************************************************* */
 
-/**
- * @file
- * Provides detection functionality by interfacing with the file reader methods.
- */
+namespace FiftyoneDegrees;
 
-require_once '51Degrees_file_reader.php';
-require_once 'LinkedList.php';
+use FiftyoneDegrees\DataStructures;
 
-global $_fiftyone_degrees_data_file_path;
-if (isset($_fiftyone_degrees_data_file_path) == FALSE) {
-  $_fiftyone_degrees_data_file_path = dirname(__FILE__) . '/51Degrees-Lite.dat';
+$_fiftyone_degrees_use_array_cache = TRUE;
+$_fiftyone_degrees_return_strings = FALSE;
+$_fiftyone_degrees_data_file_path = '';
+
+function fiftyone_degrees_set_params(array $params) {
+  global $_fiftyone_degrees_use_array_cache;
+  global $_fiftyone_degrees_return_strings;
+  global $_fiftyone_degrees_data_file_path;
+
+  $_fiftyone_degrees_use_array_cache = isset($params['use_array_cache'])?
+      (bool)$params['use_array_cache'] : TRUE;
+
+  $_fiftyone_degrees_return_strings = isset($params['return_strings'])?
+      $params['return_strings'] : TRUE;
+
+  $_fiftyone_degrees_data_file_path = isset($params['data_file_path'])?
+      $params['data_file_path'] : '';
 }
 
 function fiftyone_degrees_set_file_handle() {
   global $_fiftyone_degrees_data_file;
   global $_fiftyone_degrees_data_file_path;
-  if (!file_exists($_fiftyone_degrees_data_file_path)) {
+  if (empty($_fiftyone_degrees_data_file_path)
+      || !file_exists($_fiftyone_degrees_data_file_path)) {
     $_fiftyone_degrees_data_file_path = dirname(__FILE__) . '/51Degrees-Lite.dat';
   }
   $_fiftyone_degrees_data_file = fopen($_fiftyone_degrees_data_file_path, 'rb');

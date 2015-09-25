@@ -1,0 +1,17 @@
+{
+    "name": "fiftyone-degrees/device-detection",
+    "license": "Mozilla Public License, v. 2.0",
+    "description": "THE fastest and most accurate device detection",
+    "authors": [
+        {
+            "name": "51Degrees",
+            "homepage": "http://51degrees.com/"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"FiftyoneDegrees\\": "./"}
+    },
+    "require": {
+        "php": ">=5.3"
+    }
+}
